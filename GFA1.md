@@ -256,14 +256,24 @@ Note that W-lines can not use jump connections (introduced in v1.2).
 |--------|-------------------|-----------|--------------------------|------------
 | 1      | `RecordType`      | Character | `W`                      | Record type
 | 2      | `SampleId`        | String    | `[!-)+-<>-~][!-~]*`      | Sample identifier
-| 3      | `HapIndex`        | Integer   | `[0-9]+`                 | Haplotype index
+| 3      | `HapIndex`        | String    | `[!-)+-<>-~][!-~]*`      | Haplotype index
 | 4      | `SeqId`           | String    | `[!-)+-<>-~][!-~]*`      | Sequence identifier
 | 5      | `SeqStart`        | Integer   | `\*\|[0-9]+`             | Optional Start position
 | 6      | `SeqEnd`          | Integer   | `\*\|[0-9]+`             | Optional End position (BED-like half-close-half-open)
 | 7      | `Walk`            | String    | `([><][!-;=?-~]+)+`      | Walk
 
-For a haploid sample, `HapIndex` takes 0. For a diploid or polyploid sample,
-`HapIndex` starts with 1. For two W-lines with the same
+`HapIndex` may take one of the following values:
+
+* `pri` for the primary assembly
+* `alt` for the alternate assembly
+* `pat` for the paternal haplotype
+* `mat` for the maternal haplotype
+* `hap1` for the first haplotype if the parental origin is unknown
+* `hap2` for the second haplotype
+* `hap3` etc for additional haplotypes in case of polyploid genomes
+* Non-negative integer for backward compatibility
+
+For two W-lines with the same
 (`SampleId`,`HapIndex`,`SeqId`), their [`SeqSart`,`SeqEnd`) should have no
 overlaps. A `Walk` is defined as
 ```txt
